@@ -19,10 +19,10 @@ class Karyawans extends Component
 
     public $isModalOpen = 0;
 
-    public function mount()
-    {
-        $this->departemens = departemen::all();
-    }
+    // public function mount()
+    // {
+    //     $this->departemens = departemen::all();
+    // }
 
     public function render()
     {
