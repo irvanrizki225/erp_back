@@ -15,8 +15,8 @@ class CreateItemListsTable extends Migration
     {
         Schema::create('item_lists', function (Blueprint $table) {
             $table->id();
-            $table->integer('pr_id');
-            $table->integer('po_id');
+            $table->integer('pr_id')->nullable();
+            $table->integer('po_id')->nullable();
             $table->integer('item_id');
             $table->integer('quantity');
             $table->integer('price');

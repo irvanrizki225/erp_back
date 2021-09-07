@@ -19,9 +19,7 @@ class CreatePrsTable extends Migration
             $table->integer('karyawan_id');
             $table->integer('suplayer_id');
             $table->string('uuid');
-            $table->string('type');
-            $table->integer('quantity');
-            $table->integer('price');
+            $table->integer('price')->nullable();
             $table->date('date');
             $table->string('status')->default("PENDING");
             $table->timestamps();

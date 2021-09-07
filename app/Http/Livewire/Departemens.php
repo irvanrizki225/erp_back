@@ -56,7 +56,7 @@ class Departemens extends Component
         $this->validate([
             'name' => 'required',
         ]);
-        departemen::Create([ 'id' => $this->departemen_id], [
+        departemen::Create([
             'name' => $this->name,
         ]);
    

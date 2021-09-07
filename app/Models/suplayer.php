@@ -15,7 +15,7 @@ class suplayer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kode', 'nama', 'Alamat', 'Telp'
+        'kode', 'name', 'alamat', 'no_telp'
     ];
 
     public function pr()

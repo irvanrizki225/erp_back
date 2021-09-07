@@ -14,7 +14,6 @@ class job_karyawan extends Model
     protected $fillable = [
         'job_id',
         'karyawan_id',
-        'name',
         'req_date',
         'start',
         'finished',

@@ -17,10 +17,9 @@ class CreateJobKaryawansTable extends Migration
             $table->id();
             $table->integer('job_id');
             $table->integer('karyawan_id');
-            $table->string('name');
             $table->date('req_date');
-            $table->date('start');
-            $table->date('finished');
+            $table->date('start')->nullable();
+            $table->date('finished')->nullable();
             $table->string('description');
 
             $table->timestamps();

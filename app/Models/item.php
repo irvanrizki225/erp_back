@@ -11,7 +11,7 @@ class item extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'uuid', 'nama', 'quantity', 'unit', 'price'
+        'uuid', 'name', 'type', 'quantity', 'unit', 'price'
     ];
 
     public function item_list()

@@ -19,10 +19,10 @@ class Karyawans extends Component
 
     public $isModalOpen = 0;
 
-    // public function mount()
-    // {
-    //     $this->departemens = departemen::all();
-    // }
+    public function mount()
+    {
+        $this->departemens = departemen::all();
+    }
 
     public function render()
     {
@@ -56,6 +56,7 @@ class Karyawans extends Component
         $this->departemen = '';
         $this->email = '';
         $this->password = '';
+        $this->password_confirmation = '';
         $this->role = '';
         $this->karyawan_id = '';
         $this->posisi = '';

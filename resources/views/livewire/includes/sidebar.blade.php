@@ -80,26 +80,42 @@
                     <span class="sidebar-mini-visible">WR</span><span class="sidebar-mini-hidden">Ware House</span>
                 </li>
                 <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-reorder"></i><span class="sidebar-mini-hide">Barang</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-reorder"></i><span class="sidebar-mini-hide">Purchasing</span></a>
                     <ul>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('suplayer')}}">Suplayer</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('item')}}">Daftar Harga Barang</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('pr')}}">Purchase Request</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('item_list')}}">Daftar Barang Order</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('pr')}}">Purchase Request</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('po')}}">Purchase Order</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('penerimaan_barang')}}">Penerimaan Barang</a>
+                        </li>
                         <li>
                             <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('barang')}}">barang</a>
                         </li>
                     </ul>
                 </li>
                 <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-reorder"></i><span class="sidebar-mini-hide">Purchase Order</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-reorder"></i><span class="sidebar-mini-hide">Job</span></a>
                     <ul>
                         <li>
-                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('po')}}">Purchase Order</a>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('job')}}" >Job List</a>
                         </li>
-                    </ul>
-                </li>
-                <li class="{{ request()->is('pages/*') ? ' open' : '' }}">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-reorder"></i><span class="sidebar-mini-hide">Penerimaan Barang</span></a>
-                    <ul>
                         <li>
-                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('penerimaan_barang')}}">Penerimaan Barang</a>
+                            <a class="{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{route('job_list')}}">Job List Karyawan</a>
                         </li>
                     </ul>
                 </li>

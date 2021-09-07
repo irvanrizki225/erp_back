@@ -10,6 +10,28 @@
            <div class="modal-body">
                 <form>
                     <div class="form-group">
+                        <label for="exampleFormControlInput2">Pekerjaan Karyawan</label>
+                        <select name="Departemen" wire:model="jobs"
+                        class="form-control" id="exampleFormControlInput2"> 
+                            <option value="">-- Choose jobs --</option>
+                            @foreach($jobs as $job)
+                                <option value="{{ $job->id }}">{{ $job->name }}</option>
+                            @endforeach
+                         </select>
+                         @error('jobs') <span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput2">Nama Karyawan</label>
+                        <select name="Departemen" wire:model="jobs"
+                        class="form-control" id="exampleFormControlInput2"> 
+                            <option value="">-- Choose jobs --</option>
+                            @foreach($jobs as $job)
+                                <option value="{{ $job->id }}">{{ $job->name }}</option>
+                            @endforeach
+                         </select>
+                         @error('jobs') <span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
                         <label for="exampleFormControlInput1">Name</label>
                         <input type="text" class="form-control" id="exampleFormControlInput1" 
                         placeholder="Enter Name" wire:model="name">
@@ -26,17 +48,6 @@
                         <input type="text" class="form-control" id="exampleFormControlInput2" 
                         wire:model="alamat" placeholder="Enter Alamat">
                         @error('alamat') <span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlInput2">Departemen</label>
-                        <select name="Departemen" wire:model="departemen"
-                        class="form-control" id="exampleFormControlInput2"> 
-                            <option value="">-- Choose Departemen --</option>
-                            @foreach ($departemens as $departemen)
-                                <option value="{{ $departemen->id }}">{{ $departemen->name }}</option>
-                            @endforeach
-                         </select>
-                         @error('departemen') <span class="text-danger error">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlInput2">Role User</label>

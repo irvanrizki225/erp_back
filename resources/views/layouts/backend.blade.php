@@ -146,6 +146,9 @@
 
         <!-- Page JS Code -->
         <script src="{{ asset('js/pages/tables_datatables.js') }}"></script>
+        <script>
+            window.livewire.on('ShowKaryawan', () => $('#karyawan').modal('show'));
+        </script>
         @livewireScripts
     </body>
 </html>
