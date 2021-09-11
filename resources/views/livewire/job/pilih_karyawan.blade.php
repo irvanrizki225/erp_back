@@ -48,7 +48,8 @@
                                         <td class="border px-4 py-2">{{ $karyawan->name }}</td>
                                         <td class="border px-4 py-2">{{ $karyawan->posisi }}</td>
                                         <td class="border px-4 py-2">
-                                            <input class="form-checkbox h-6 w-6 text-green-500" wire:model="id_karyawan.{{ $karyawan->id }}" 
+                                            <input class="form-checkbox h-6 w-6 text-green-500" 
+                                            wire:model="id_karyawan.{{ $karyawan->id }}" 
                                             type="checkbox" value="{{ $karyawan->id }}" id="flexCheckDefault">
                                         </td>
                                     </tr>

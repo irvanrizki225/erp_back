@@ -14,19 +14,50 @@ use App\Models\karyawan;
 class Prs extends Component
 {
     public $prs, $pr_id, $item_lists, $item_list_id, $job_id, $jobs, 
-        $karyawan_id, $karyawans, $suplayer_id, $suplayers;
-    public $uuid, $price, $date, $status; 
+        $karyawan_id, $karyawans, $suplayer_id, $suplayers, $items, $item_id;
+    public $uuid, $price, $date, $status, $quantity; 
     public $isModalOpen = 0;
 
     public function render()
     {
         $this->prs = pr::with('job', 'karyawan', 'suplayer')->get();
         $this->jobs = job::all();
-        $this->karyawan = karyawan::all();
+        $this->item_lists = item_list::all();
+        $this->karyawans = karyawan::all();
         $this->suplayers = suplayer::all();
+        $this->items = item::all();
         return view('livewire.prs')
         ->extends('layouts.backend')
         ->section('content');
+    }
+
+    public function create()
+    {
+        $this->resetCreateForm();
+        $this->openModalPopover();
+    }
+
+    public function openModalPopover()
+    {
+        $this->isModalOpen = true;
+    }
+
+    public function closeModalPopover()
+    {
+        $this->isModalOpen = false;
+    }
+
+    private function resetCreateForm(){
+        $this->pr_id = '';
+        $this->prs = '';
+        $this->jobs = '';
+        $this->item_lists = '';
+        $this->suplayers = '';
+        $this->date = '';
+        $this->uuid = '';
+        $this->price = '';
+        $this->item_id = '';
+        $this->quantity = '';
     }
 
     public function store()
@@ -35,12 +66,11 @@ class Prs extends Component
             'karyawan_id' => 'required',
             'job_id' => 'required',
             'suplayer_id' => 'required',
-            'uuid' => 'required',
             'date' => 'required',
         ]);
         $tgl=date('d-m-Y');
         $kode = 'PR' . substr($tgl,-2) . substr($tgl,-7,2) . '_' . mt_rand(1000, 9999);
-        $this->profit = (30/100) * $this->price;
+
         pr::Create([
             'karyawan_id' => $this->karyawan_id,
             'job_id' => $this->job_id,
@@ -57,12 +87,13 @@ class Prs extends Component
 
     public function edit($id)
     {
-        $jobs = job::findOrFail($id);
-        $this->job_id = $jobs->id;
-        $this->name = $jobs->name;
-        $this->uuid = substr($jobs->uuid,12);
-        $this->company = $jobs->company;
-        $this->price = $jobs->price;
+        $prs = pr::findOrFail($id);
+        $this->pr_id = $prs->id;
+        $this->karyawan_id = $prs->karyawan->id;
+        $this->job_id = $prs->job->id;
+        $this->suplayer_id = $prs->suplayer->id;
+        $this->uuid = $prs->uuid;
+        $this->date = $prs->date;
      
         $this->openModalPopover();
     }
@@ -70,24 +101,20 @@ class Prs extends Component
     public function update()
     {
         $this->validate([
-            'name' => 'required',
-            'uuid' => 'required',
-            'company' => 'required',
-            'price' => 'required',
+            'karyawan_id' => 'required',
+            'job_id' => 'required',
+            'suplayer_id' => 'required',
+            'date' => 'required',
         ]);
-        $tgl=date('d-m-Y');
-        $kode = 'JOB' . substr($tgl,-2) . substr($tgl,-7,2) . '_' . mt_rand(1000, 9999);
-        $this->profit = (30/100) * $this->price;
 
-        $jobs = job::find($this->job_id);
-        $jobs->uuid = substr($jobs->uuid,0,12).$this->uuid;
-        $jobs->name = $this->name;
-        $jobs->company = $this->company;
-        $jobs->price = $this->price;
-        $jobs->profit = $this->profit;
-        $jobs->save();
+        $prs = pr::find($this->pr_id);
+        $prs->karyawan_id = $this->karyawan_id;
+        $prs->job_id = $this->job_id;
+        $prs->suplayer_id = $this->suplayer_id;
+        $prs->date = $this->date;
+        $prs->update();
    
-        session()->flash('message', 'Job Update Successfully.');
+        session()->flash('message', 'Purchase Request Update Successfully.');
    
             $this->closeModalPopover();
             $this->resetCreateForm();
@@ -97,7 +124,7 @@ class Prs extends Component
     public function delete($id)
     {
         job::find($id)->delete();
-        session()->flash('message', 'Job Deleted Successfully.');
+        session()->flash('message', 'Purchase Request Deleted Successfully.');
     }
 
     public function pilih()
@@ -106,39 +133,50 @@ class Prs extends Component
         $this->openModalPopover();
     }
 
-    public function karyawan()
+
+    public function item()
     {
         $this->validate([
-            'job' => 'required',
-            'id_karyawan' => 'required',
-            'req_date' => 'required',
-            'descrip' => 'required',
+            'pr_id' => 'required',
+            'item_id' => 'required',
+            'quantity' => 'required',
         ]);
-        $jobs = job::find($this->job);
-        // dd($this->id_karyawan);
-        
-        foreach ($this->id_karyawan as $this->id_karyawan) {
-            $karyawans = new job_karyawan;
-            $karyawans->job_id = $this->job;
-            $karyawans->karyawan_id = $this->id_karyawan;
-            $karyawans->req_date = $this->req_date;
-            $karyawans->description = $this->descrip;
-            $karyawans->save();
-        }
-        // dd($karyawans);
-        session()->flash('message', 'Job Karyawan Created Successfully.');
 
-            $this->closeModalPopover();
-            $this->resetCreateForm();
+        // $price = item_list::leftjoin('items', 'item_lists.item_id', '=', 'items.id')
+        //         ->selectRaw('SUM(items.price*item_lists.quantity)')->where('items.id',$this->item_id)->get();
+        //debug
+        // dd($this->pr_id, $this->item_id,$this->quantity);
+        $item_id = $this->item_id;
+        foreach ($this->quantity as $this->quantity) {
+            $item_list = new item_list;
+            $item_list->pr_id = $this->pr_id;
+            $item_list->item_id = $this->item_id;
+            $item_list->quantity = $this->quantity;
+            $item_list->save();
+
+            $items = item::find($item_list->item_id);
+            $price = $items->price * $item_list->quantity;
+            $item_list->price = $price;
+            $item_list->update();
+
+            $prs = pr::find($item_list->pr_id);
+            $prs->price = $price;
+            $prs->update();
+        }
+        // dd($item_id, $this->item_id, $this->quantity, $item_list);
+        // dd($price);
+
+        session()->flash('message', 'List Barang Created Successfully.');
+       
     }
     protected $listeners = ['open' => 'list'];
 
     public function list($id)
     {
         // $this->job_lists = job_karyawan::findOrFail($id)->with('job');
-        $this->job_lists = job_karyawan::where('job_id','=', $id)->with('job')->get();
+        $this->job_lists = job_karyawan::where('job','=', $id)->with('job')->get();
         // $this->id_karyawan = $this->job_lists->karyawan_id;
-        $this->karyawans = karyawan::all();
+        $this->item_lists = karyawan::all();
         dd($this->job_lists);
 
         // $this->emit('ShowKaryawan');

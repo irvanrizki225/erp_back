@@ -139,7 +139,6 @@ class Jobs extends Component
             'req_date' => 'required',
             'descrip' => 'required',
         ]);
-        $jobs = job::find($this->job);
         // dd($this->id_karyawan);
         
         foreach ($this->id_karyawan as $this->id_karyawan) {

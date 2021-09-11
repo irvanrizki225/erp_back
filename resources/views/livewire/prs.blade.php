@@ -4,7 +4,7 @@
         <!-- Dynamic Table Full -->
         <div class="block">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Table Job</h3>
+                <h3 class="block-title">Table Purchase Request</h3>
             </div>
             @if (session()->has('message'))
                 <div class="alert alert-success" style="margin-top:30px;">x
@@ -13,12 +13,12 @@
             @endif
             <div class="block-content block-content-full">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" wire:click="create()">
-                    Add Job
+                    Add Purchase Request
                 </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#karyawan" wire:click="pilih()">
-                    Pilih Karyawan
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#item_barang" wire:click="pilih()">
+                    Pilih Item Barang
                 </button>
-                {{-- @include('livewire.pr.pilih_karyawan') --}}
+                @include('livewire.pr.pilih_item')
                 {{-- @include('livewire.pr.karyawan') --}}
                 @include('livewire.pr.update')
                 @if ($isModalOpen)
@@ -35,6 +35,7 @@
                             <th class="px-4 py-2">Kode Job</th>
                             <th class="px-4 py-2">Nama Karyawan</th>
                             <th class="px-4 py-2">Suplayer</th>
+                            <th class="px-4 py-2">Harga</th>
                             <th class="px-4 py-2">Create At</th>
                             <th class="px-4 py-2">Status</th>
                             <th class="px-4 py-2">Action</th>
@@ -54,6 +55,7 @@
                             <td class="border px-4 py-2">{{ $pr->job->uuid}}</td>
                             <td class="border px-4 py-2">{{ $pr->karyawan->name }}</td>
                             <td class="border px-4 py-2">{{ $pr->suplayer->name }}</td>
+                            <td class="border px-4 py-2">{{ $pr->price}}</td>
                             <td class="border px-4 py-2">{{ $pr->date}}</td>
                             <td class="border px-4 py-2">{{ $pr->status}}</td>
                             <td class="border px-4 py-2">

@@ -14,7 +14,7 @@ class item_list extends Model
     use HasFactory;
     
     protected $fillable = [
-        'pr_id', 'po_id', 'item_id', 'name', 'type', 'price'
+        'pr_id', 'po_id', 'item_id', 'name', 'type', 'price', 'quantity'
     ];
 
     public function pr()
@@ -23,7 +23,9 @@ class item_list extends Model
     }
     public function po()
     {
-        return $this->belongsTo(po::class);
+        return $this->belongsTo(po::class)->withDefault([
+            'uuid' => '0',
+        ]);
     }
     public function item()
     {
