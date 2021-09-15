@@ -33,7 +33,7 @@
                             <td class="border px-4 py-2">{{ $item_list->po->uuid}}</td>
                             <td class="border px-4 py-2">{{ $item_list->item->uuid}}</td>
                             <td class="border px-4 py-2">{{ $item_list->quantity}}</td>
-                            <td class="border px-4 py-2">{{ $item_list->price}}</td>
+                            <td class="border px-4 py-2">IDR {{ $item_list->price}}</td>
                             <td class="border px-4 py-2">
                                 <button wire:click="delete({{ $item_list->id }})" class="btn btn-danger">
                                     <i class="fa fa-times"></i>

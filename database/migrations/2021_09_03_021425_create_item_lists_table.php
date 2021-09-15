@@ -20,6 +20,7 @@ class CreateItemListsTable extends Migration
             $table->integer('item_id');
             $table->integer('quantity');
             $table->integer('price')->nullable();
+            $table->integer('price_total')->nullable();
             $table->timestamps();
         });
     }

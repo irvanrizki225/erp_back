@@ -4,18 +4,23 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\po;
-use App\Models\penerimaan_barang;
+use App\Models\pr;
+use App\Models\item_list;
+use App\Models\karyawan;
 
 class Pos extends Component
 {
-    public $pos, $barangs, $po_id, $name, $type, $quantity, 
-    $barang_id, $date, $status, $uuid;
+    public $pos, $prs_s, $po_id, $pr_id, $uuid, $type, $quantity, $price,
+        $date, $invoice, $status, $karyawan_id;
+    public $karyawans_p;
     public $isModalOpen = 0;
-    public $nstatus = 'PENDING';
 
     public function render()
     {
-        $this->pos= po::all();
+        $this->pos= po::with('pr', 'job', 'karyawan', 'suplayer')->get();
+        $this->prs_s= pr::where('status', 'SUCCESS')->get();
+        $this->karyawans_p = karyawan::all();
+
         return view('livewire.pos')
         ->extends('layouts.backend')
         ->section('content');
@@ -38,13 +43,8 @@ class Pos extends Component
     }
 
     private function resetCreateForm(){
-        $this->po_id = '';
-        $this->name = '';
-        $this->type = '';
-        $this->quantity = '';
-        $this->barang_id = '';
-        $this->date = '';
-        $this->uuid = '';
+        $this->pr_id = '';
+        $this->karyawan_id = '';
     }
 
     
@@ -56,25 +56,36 @@ class Pos extends Component
     public function store()
     {
         $this->validate([
-            'name' => 'required',
-            'type' => 'required',
-            'quantity' => 'required',
-            'date' => 'required',
-            'status' => 'required',
+            'pr_id' => 'required',
+            'karyawan_id' => 'required',
         ]);
-        $this->uuid = 'BRG' . mt_rand(10000, 99999) . mt_rand(10, 99);
+        
+        $tgl=date('d-m-Y');
+        $date = date("Y-m-d H:i:s");
+        $kode = 'PO' . substr($tgl,-2) . substr($tgl,-7,2) . '_' . mt_rand(1000, 9999);
 
-        po::Create([
-            'uuid' => $this->uuid,
-            'name' => $this->name,
-            'type' => $this->type,
-            'quantity' => $this->quantity,
-            'date' => $this->date,  
-            'status' => $this->status,
-        ]);
-   
-        session()->flash('message   ', 
-            $this->po_id ? 'Purchase Order Updated Successfully.' : 'Purchase Order Created Successfully.');
+        $prs = pr::find($this->pr_id);
+
+        $pos = po::Create([
+                'karyawan_id' => $this->karyawan_id,
+                'pr_id' => $this->pr_id,
+                'job_id' => $prs->job_id,
+                'suplayer_id' => $prs->suplayer_id,
+                'uuid' => $kode,
+                'date' => $date,
+                'price' => $prs->price,
+            ]);
+
+        $po = po::where('pr_id', $this->pr_id)->get();
+        if ($pos == true) {
+            $item_list = item_list::where('pr_id', $this->pr_id)->get();
+            foreach ($item_list as $item_list) {
+                $item_list->po_id = $pos->id;
+                $item_list->update();
+            }
+        }
+    
+        session()->flash('message', 'Purchase Order Created Successfully.');
    
             $this->closeModalPopover();
             $this->resetCreateForm();

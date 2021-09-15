@@ -142,23 +142,23 @@ class Prs extends Component
             'quantity' => 'required',
         ]);
 
-        // $price = item_list::leftjoin('items', 'item_lists.item_id', '=', 'items.id')
-        //         ->selectRaw('SUM(items.price*item_lists.quantity)')->where('items.id',$this->item_id)->get();
-        //debug
-        // dd($this->pr_id, $this->item_id,$this->quantity);
         $item_id = $this->item_id;
         foreach ($this->quantity as $this->quantity) {
+            //error
             $item_list = new item_list;
             $item_list->pr_id = $this->pr_id;
             $item_list->item_id = $this->item_id;
             $item_list->quantity = $this->quantity;
             $item_list->save();
 
+            //pemanggilan item harga dan dikalikan quantity
             $items = item::find($item_list->item_id);
             $price = $items->price * $item_list->quantity;
+
             $item_list->price = $price;
             $item_list->update();
 
+            //error harusnya count di kolom harga item list
             $prs = pr::find($item_list->pr_id);
             $prs->price = $price;
             $prs->update();
@@ -173,12 +173,31 @@ class Prs extends Component
 
     public function list($id)
     {
-        // $this->job_lists = job_karyawan::findOrFail($id)->with('job');
-        $this->job_lists = job_karyawan::where('job','=', $id)->with('job')->get();
-        // $this->id_karyawan = $this->job_lists->karyawan_id;
-        $this->item_lists = karyawan::all();
-        dd($this->job_lists);
+        $item_lists = item_list::where('pr_id', $id)->get();
+        // $item_lists
+        
+        foreach ($item_lists as $item_lists) {
+            $this->pr_id = $item_lists->pr_id;
+            $this->item_id = $item_lists->item_id;
+            $this->quantity = $item_lists->quantity;
+            // dd($item_lists->price); //debug
+        } 
 
-        // $this->emit('ShowKaryawan');
+        
+    }
+
+    public function setStatus($value,$id)
+    {
+        $this->prs = pr::find($id); 
+        $this->prs->status = $value;
+        $this->prs->save();
+        
+        if ($value == 'SUCCESS' ) {
+            session()->flash('message', 'Purchase Request SUCCESS.');
+        }else { 
+            session()->flash('message', 'Purchase Request FAILED.');
+        }
+
+        
     }
 }

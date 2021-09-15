@@ -15,7 +15,6 @@
                         placeholder="Enter Name" wire:model="name">
                         @error('name') <span class="text-danger error">{{ $message }}</span>@enderror
                     </div>
-                   
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Tipe Barang</label>
                         <input type="text" class="form-control" id="exampleFormControlInput1" 

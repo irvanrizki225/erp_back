@@ -10,42 +10,26 @@
            <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Kode Barang</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1" 
-                        wire:model="uuid" readonly>
-                        @error('uuid') <span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlInput1">Name</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Name" wire:model="name">
-                        @error('name') <span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlInput2">Type</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput2" 
-                        wire:model="type" placeholder="Enter Type">
-                        @error('type') <span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="form-group">    
-                        <label for="exampleFormControlInput2">Quantity</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput2" 
-                        wire:model="quantity" placeholder="Enter Quantity">
-                        @error('quantity') <span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="form-group">    
-                        <label for="exampleFormControlInput2">Date</label>
-                        <input type="date" class="form-control" id="exampleFormControlInput2" 
-                        wire:model="date" placeholder="Enter Date">
-                        @error('date') <span class="text-danger error">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlInput2">Departemen</label>
-                        <select name="status" wire:model="status"
-                        class="form-control" id="exampleFormControlInput2">
-                            <option value="SUCCESS">SUCCESS</option>
-                            <option value="PENDING">PENDING</option>
+                        <label for="exampleFormControlInput2">Pilih PR</label>
+                        <select name="Departemen" wire:model="pr_id"
+                        class="form-control" id="exampleFormControlInput2"> 
+                            <option value="">-- Choose PR --</option>
+                            @foreach ($prs_s as $pr)
+                                <option value="{{ $pr->id }}">{{ $pr->uuid }} | {{ $pr->status }}</option>
+                            @endforeach
                          </select>
-                         @error('status') <span class="text-danger error">{{ $message }}</span>@enderror
+                         @error('pr_id') <span class="text-danger error">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput2">Dibuat Oleh</label>
+                        <select name="Departemen" wire:model="karyawan_id"
+                        class="form-control" id="exampleFormControlInput2"> 
+                            <option value="">-- Choose Karyawan --</option>
+                            @foreach ($karyawans_p as $karyawan)
+                                <option value="{{ $karyawan->id }}">{{ $karyawan->name }}</option>
+                            @endforeach
+                         </select>
+                         @error('karyawan_id') <span class="text-danger error">{{ $message }}</span>@enderror
                     </div>
                 </form>
             </div>
