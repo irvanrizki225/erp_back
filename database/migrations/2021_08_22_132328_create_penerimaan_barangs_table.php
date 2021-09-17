@@ -20,7 +20,7 @@ class CreatePenerimaanBarangsTable extends Migration
             $table->integer('suplayer_id');
             $table->integer('po_id');            
             $table->date('req_date');
-            $table->date('arrival_date');
+            $table->date('arrival_date')->nullable();
             $table->string('status')->default("PENDING");
             
             $table->timestamps();

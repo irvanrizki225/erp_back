@@ -13,7 +13,7 @@ class PenerimaanBarangs extends Component
 
     public function render()
     {
-        $this->penerimaan_barangs = penerimaan_barang::all();
+        $this->penerimaan_barangs = penerimaan_barang::with('job','karyawan','po','suplayer')->get();
         return view('livewire.penerimaan-barangs')
         ->extends('layouts.backend')
         ->section('content');

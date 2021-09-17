@@ -25,7 +25,7 @@ class po extends Model
         'type',
         'date', 
         'quantity', 
-        'prince', 
+        'price', 
         'invoice', 
         'status', 
     ];

@@ -17,10 +17,10 @@
                     <thead>
                         <tr class="bg-gray-100 text-center">
                             <th class="px-4 py-2 w-20 align-middle">No</th>
-                            <th class="px-4 py-2 align-middle">PO ID</th>
-                            <th class="px-4 py-2 align-middle">Kode Barang</th>
-                            <th class="px-4 py-2 align-middle">Create At</th>
-                            <th class="px-4 py-2 align-middle">Quantity Barang</th>
+                            <th class="px-4 py-2 align-middle">Kode PO</th>
+                            <th class="px-4 py-2 align-middle">PO</th>
+                            <th class="px-4 py-2 align-middle">Req Date</th>
+                            <th class="px-4 py-2 align-middle">Ariv Date</th>
                             <th class="px-4 py-2 align-middle">Status Barang</th>
                             <th class="px-4 py-2 align-middle">Set Status Barang</th>
                             <th class="px-4 py-2 align-middle">ACTION</th>
@@ -30,10 +30,18 @@
                         @foreach($penerimaan_barangs as $penerimaan_barang)
                         <tr class="text-center">
                             <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->id }}</td>
-                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->po_id }}</td>
-                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->uuid }}</td>
-                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->date}}</td>
-                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->quantity}}</td>
+                            <td class="border px-4 py-2 align-middle">
+                                <button data-toggle="modal" data-target="#list" 
+                                wire:click="list({{ $penerimaan_barang->po->id }})" 
+                                class="btn btn-primary">
+                                {{ $penerimaan_barang->po->uuid }}
+                                </button>
+                            </td>
+                            <td class="border px-4 py-2 align-middle">
+                                {{ $penerimaan_barang->karyawan->name }} / {{ $penerimaan_barang->suplayer->name }}
+                            </td>
+                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->req_date}}</td>
+                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->arrival_date}}</td>
                             <td class="border px-4 py-2" style="text-align: center;">
                                 @if($penerimaan_barang->status == 'PENDING')
                                     <span class="badge badge-info">
@@ -65,6 +73,10 @@
                             </td>
                             <td class="border px-4 py-2 align-middle">
                                 @if ($penerimaan_barang->status == 'PENDING')
+                                    <button data-toggle="modal" data-target="#updateModal" 
+                                    wire:click="edit({{ $penerimaan_barang->id }})" class="btn btn-primary">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
                                     <button wire:click="delete({{ $penerimaan_barang->id }})" class="btn btn-danger">
                                         <i class="fa fa-times"></i>
                                     </button>

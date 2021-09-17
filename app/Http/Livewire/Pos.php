@@ -7,12 +7,14 @@ use App\Models\po;
 use App\Models\pr;
 use App\Models\item_list;
 use App\Models\karyawan;
+use App\Models\item;
+use App\Models\penerimaan_barang;
 
 class Pos extends Component
 {
     public $pos, $prs_s, $po_id, $pr_id, $uuid, $type, $quantity, $price,
         $date, $invoice, $status, $karyawan_id;
-    public $karyawans_p;
+    public $karyawans_p, $items, $req_date;
     public $isModalOpen = 0;
 
     public function render()
@@ -20,6 +22,7 @@ class Pos extends Component
         $this->pos= po::with('pr', 'job', 'karyawan', 'suplayer')->get();
         $this->prs_s= pr::where('status', 'SUCCESS')->get();
         $this->karyawans_p = karyawan::all();
+        $this->items = item::all();
 
         return view('livewire.pos')
         ->extends('layouts.backend')
@@ -44,7 +47,11 @@ class Pos extends Component
 
     private function resetCreateForm(){
         $this->pr_id = '';
+        $this->po_id = '';
+        $this->uuid = '';
+        $this->req_date = '';
         $this->karyawan_id = '';
+        $this->status = '';
     }
 
     
@@ -95,12 +102,9 @@ class Pos extends Component
     {
         $this->pos = po::findOrFail($id);
         $this->po_id = $id;
+        $this->pr_id = $this->pos->pr_id;
         $this->uuid = $this->pos->uuid;
-        $this->name = $this->pos->name;
-        $this->type = $this->pos->type;
-        $this->quantity = $this->pos->quantity;
-        $this->date = $this->pos->date;
-        $this->status = $this->pos->status;
+        $this->karyawan_id = $this->pos->karyawan_id;
      
         $this->openModalPopover();
     }
@@ -108,23 +112,26 @@ class Pos extends Component
     public function update()
     {
         $this->validate([
-            'name' => 'required',
-            'type' => 'required',
-            'quantity' => 'required',
-            'date' => 'required',
-            'status' => 'required|in:PENDING, FAILED',
+            'pr_id' => 'required',
+            'karyawan_id' => 'required',
         ]);
     
         $pos = po::find($this->po_id);
-        // if(is_null($this->$pos)) {
-        //     session()->flash('message','oke');    
-        //  }
-        $pos->name = $this->name;
-        $pos->type = $this->type;
-        $pos->quantity = $this->quantity;
-        $pos->date = $this->date;
-        $pos->status = $this->status;
-        $pos->save();
+        $prs = pr::find($this->pr_id);
+
+        $pos = po::update([
+                'karyawan_id' => $this->karyawan_id,
+                'pr_id' => $this->pr_id,
+            ]);
+
+        $po = po::where('pr_id', $this->pr_id)->get();
+        if ($pos == true) {
+            $item_list = item_list::where('pr_id', $this->pr_id)->get();
+            foreach ($item_list as $item_list) {
+                $item_list->po_id = $pos->id;
+                $item_list->update();
+            }
+        }
    
         session()->flash('message', 'Purchase Order Updated Successfully.');
    
@@ -145,27 +152,63 @@ class Pos extends Component
         session()->flash('message', 'Purchase Order Deleted Successfully.');
     }
 
-    public function setStatus($value,$id)
+    public function pilih()
     {
-        $this->pos = po::find($id); 
-        $this->pos->status = $value;
-        $this->pos->save();
+        $this->resetCreateForm();
+        $this->openModalPopover();
+    }
 
-        $status = "PENDING";
+    public function list($id)
+    {
+        $item_lists = item_list::where('po_id', $id)->get();
+        // dd($item_lists);
         
-        if ($value == 'SUCCESS' ) {
-            penerimaan_barang::create([
-                'po_id' =>  $this->pos->id,
-                'uuid' =>  $this->pos->uuid,
-                'date' => $this->pos->date,
-                'quantity' => $this->pos->quantity,
-                'status' => $status,
-            ]);
-            session()->flash('message', 'Purchase Order SUCCESS.');
-        }else { 
-            session()->flash('message', 'Purchase Order FAILED.');
+        foreach ($item_lists as $item_lists) {
+            $this->pr_id = $item_lists->pr_id;
+            $this->item_id = $item_lists->item_id;
+            $this->quantity = $item_lists->quantity;
+            // dd($item_lists->price); //debug
         }
 
+        $this->closeModalPopover();
+        $this->resetCreateForm();
+    }
+
+    public function status($id)
+    {
+        $pos = po::find($id);
+        $this->uuid = $pos->uuid;
+        $this->po_id = $pos->id;
+        $this->openModalPopover();
+    }
+
+    public function setStatus()
+    {
+        $this->validate([
+            'req_date' => 'required',
+            'status' => 'required',
+        ]);
+        // dd($this->po_id, $this->status, $this->req_date);
+        $this->pos = po::find($this->po_id); 
+        $this->pos->status = $this->status;
+        $this->pos->save();
+        
+        if ($this->status == 'SUCCESS' ) {
+            $pos = po::find($this->po_id);
+            $penerimaan = new penerimaan_barang;
+            $penerimaan->job_id = $pos->job_id;
+            $penerimaan->karyawan_id = $pos->karyawan_id;
+            $penerimaan->suplayer_id = $pos->suplayer_id;
+            $penerimaan->po_id = $pos->id;
+            $penerimaan->req_date = $this->req_date;
+            $penerimaan->save();
+            session()->flash('message', 'Purchase Order Status SUCCESS.');
+        }else { 
+            session()->flash('message', 'Purchase Order Status FAILED.');
+        }
+
+        $this->closeModalPopover();
+        $this->resetCreateForm();
         
     }
 

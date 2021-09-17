@@ -21,6 +21,8 @@
                 </button>
                 {{-- <a href="javascript:void(0);" wire:click="create()" class="btn btn-success "></a> --}}
                 @include('livewire.po.update')
+                @include('livewire.po.item')
+                @include('livewire.po.status')
                 @if ($isModalOpen)
                 @include('livewire.po.create')
                 @endif
@@ -31,10 +33,10 @@
                     <thead>
                         <tr class="bg-gray-100 text-center">
                             <th >No</th>
-                            <th >Kode</th>
-                            <th >Nama Barang</th>
-                            <th >Tipe Barang</th>
-                            <th >Quantity Barang</th>
+                            <th >Kode PO</th>
+                            <th >Kode Job</th>
+                            <th >PR</th>
+                            <th >Harga</th>
                             <th >Create At</th>
                             <th >Status Barang</th>
                             <th >Set Status Barang</th>
@@ -45,10 +47,18 @@
                         @foreach($pos as $po)
                         <tr class="text-center">
                             <td class="border px-4 py-2">{{ $po->id }}</td>
-                            <td class="border px-4 py-2">{{ $po->uuid}}</td>
-                            <td class="border px-4 py-2">{{ $po->name}}</td>
-                            <td class="border px-4 py-2">{{ $po->type}}</td>
-                            <td class="border px-4 py-2">{{ $po->quantity}}</td>
+                            <td class="border px-4 py-2">
+                                <button data-toggle="modal" data-target="#list" 
+                                wire:click="list({{ $po->id }})" 
+                                class="btn btn-primary">
+                                    {{ $po->uuid }}
+                                </button>
+                            </td>
+                            <td class="border px-4 py-2">{{ $po->job->uuid}}</td>
+                            <td class="border px-4 py-2">
+                                {{ $po->suplayer->name}} / {{ $po->karyawan->name }}
+                            </td>
+                            <td class="border px-4 py-2">{{ $po->price}}</td>
                             <td class="border px-4 py-2">{{ $po->date}}</td>
                             <td class="border px-4 py-2" style="text-align: center;">
                                 @if($po->status == 'PENDING')
@@ -80,14 +90,10 @@
                             
                             <td class="border px-4 py-2" style="text-align: center;">
                                 @if ($po->status == 'PENDING')
-                                    <a href="#" wire:click="setStatus('SUCCESS', {{ $po->id }})"
-                                    class="btn btn-primary btm-sm">
-                                        SUCCESS
-                                    </a>
-                                    <a href="#" wire:click="setStatus('FAILED', {{ $po->id }})"
-                                    class="btn btn-danger btm-sm">
-                                        FAILED
-                                    </a>
+                                    <button data-toggle="modal" data-target="#status" 
+                                    wire:click="status({{ $po->id }})" class="btn btn-primary">
+                                        Set Status
+                                    </button>
                                 @elseif($po->status == 'SUCCESS')
                                     <span class="badge badge-success">SUCCESS</span>
                                 @else

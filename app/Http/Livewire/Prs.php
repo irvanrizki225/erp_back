@@ -142,25 +142,39 @@ class Prs extends Component
             'quantity' => 'required',
         ]);
 
-        $item_id = $this->item_id;
-        foreach ($this->quantity as $this->quantity) {
-            //error
+        //error kurang dalam inputan quantity
+        foreach ($this->item_id as $this->item_id) {  
             $item_list = new item_list;
             $item_list->pr_id = $this->pr_id;
             $item_list->item_id = $this->item_id;
-            $item_list->quantity = $this->quantity;
             $item_list->save();
+        }
 
-            //pemanggilan item harga dan dikalikan quantity
-            $items = item::find($item_list->item_id);
-            $price = $items->price * $item_list->quantity;
-
-            $item_list->price = $price;
-            $item_list->update();
+        //error kurang dalam inputan quantity
+        foreach ($this->quantity as $this->quantity) {
+            $item_list_q = item_list::where('pr_id',$item_list->pr_id)->get();
+            foreach ($item_list_q as $item_list_q) {
+                $item_list_q->quantity = $this->quantity;
+    
+                $items = item::find($item_list_q->item_id);
+                $price = $items->price * $this->quantity;
+        
+                $item_list_q->price = $price;
+                $item_list_q->update();
+            }
+        }
+        
+        //-----oke-----//
+        $total_price = item_list::where('pr_id', $this->pr_id)->sum('price');
+        $itemList = item_list::where('pr_id', $this->pr_id)->get();
+        
+        foreach ($itemList as $itemList) {
+            $itemList->price_total = $total_price;
+            $itemList->update();
 
             //error harusnya count di kolom harga item list
-            $prs = pr::find($item_list->pr_id);
-            $prs->price = $price;
+            $prs = pr::find($this->pr_id);
+            $prs->price = $total_price;
             $prs->update();
         }
         // dd($item_id, $this->item_id, $this->quantity, $item_list);

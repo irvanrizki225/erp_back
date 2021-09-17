@@ -58,13 +58,13 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlInput2">Password</label>
-                        <input type="pasword" class="form-control" id="exampleFormControlInput2" 
+                        <input type="password" class="form-control" id="exampleFormControlInput2" 
                         wire:model="password">
                         @error('password') <span class="text-danger error">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlInput2">Pasword Konfirmasi</label>
-                        <input type="pasword" class="form-control" id="exampleFormControlInput2" 
+                        <input type="password" class="form-control" id="exampleFormControlInput2" 
                         wire:model="password_confirmation">
                         @error('password_confirmation') <span class="text-danger error">{{ $message }}</span>@enderror
                     </div>
@@ -72,7 +72,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
-                <button type="button" wire:click.prevent="store()" class="btn btn-primary">Save changes</button>
+                <button type="button" wire:click.prevent="store()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>

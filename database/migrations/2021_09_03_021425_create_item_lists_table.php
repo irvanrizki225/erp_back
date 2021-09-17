@@ -18,7 +18,7 @@ class CreateItemListsTable extends Migration
             $table->integer('pr_id')->nullable();
             $table->integer('po_id')->nullable();
             $table->integer('item_id');
-            $table->integer('quantity');
+            $table->integer('quantity')->nullable();
             $table->integer('price')->nullable();
             $table->integer('price_total')->nullable();
             $table->timestamps();

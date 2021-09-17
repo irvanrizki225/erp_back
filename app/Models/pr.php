@@ -26,6 +26,7 @@ class pr extends Model
         'price',
         'status',
     ];
+    
     public function po()
     {
         return $this->hasMany(po::class);
