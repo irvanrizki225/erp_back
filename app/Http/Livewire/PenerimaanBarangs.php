@@ -9,7 +9,7 @@ use App\Models\barang;
 
 class PenerimaanBarangs extends Component
 {
-    public $penerimaan_barangs;
+    public $penerimaan_barangs, $ariv_date, $pos;
 
     public function render()
     {
@@ -22,7 +22,6 @@ class PenerimaanBarangs extends Component
     public function delete($id)
     {
         $this->penerimaan_barangs=penerimaan_barang::find($id);
-        po::where('id', $this->penerimaan_barangs->po_id)->delete();
         $this->penerimaan_barangs->delete(); 
         
         session()->flash('message', 'Penerimaan Barang Deleted Successfully.');

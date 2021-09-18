@@ -41,7 +41,12 @@
                                 {{ $penerimaan_barang->karyawan->name }} / {{ $penerimaan_barang->suplayer->name }}
                             </td>
                             <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->req_date}}</td>
-                            <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->arrival_date}}</td>
+                            <td class="border px-4 py-2 align-middle">
+                                <button data-toggle="modal" data-target="#updateModal" 
+                                wire:click="edit({{ $penerimaan_barang->id }})" class="btn btn-primary">
+                                    {{ $penerimaan_barang->arrival_date }}
+                                </button>
+                            </td>
                             <td class="border px-4 py-2" style="text-align: center;">
                                 @if($penerimaan_barang->status == 'PENDING')
                                     <span class="badge badge-info">
@@ -73,10 +78,6 @@
                             </td>
                             <td class="border px-4 py-2 align-middle">
                                 @if ($penerimaan_barang->status == 'PENDING')
-                                    <button data-toggle="modal" data-target="#updateModal" 
-                                    wire:click="edit({{ $penerimaan_barang->id }})" class="btn btn-primary">
-                                        <i class="fa fa-pencil"></i>
-                                    </button>
                                     <button wire:click="delete({{ $penerimaan_barang->id }})" class="btn btn-danger">
                                         <i class="fa fa-times"></i>
                                     </button>

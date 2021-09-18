@@ -32,7 +32,9 @@ class po extends Model
 
     public function penerimaan_barang()
     {
-        return $this->hasMany(penerimaan_barang::class);
+        return $this->hasMany(penerimaan_barang::class)->withDefault([
+            'arrival_date' => '0',
+        ]);
     }
     public function barang()
     {

@@ -21,7 +21,7 @@ class penerimaan_barang extends Model
         'suplayer_id',
         'po_id',
         'req_date',
-        'arrival_date, ',
+        'arrival_date',
         'status',
     ];
 
