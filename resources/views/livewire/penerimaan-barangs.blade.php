@@ -11,7 +11,9 @@
                 {{ session('message') }}
                 </div>
             @endif
-            <div class="block-content block-content-full">
+            @include('livewire.penerimaan.item')
+            @include('livewire.penerimaan.status')
+            <div class="block-content block-content-full" style="overflow-x:auto;">
                 <!-- DataTables init on table by adding .js-dataTable-full class, functionality is initialized in js/pages/tables_datatables.js -->
                 <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
@@ -42,10 +44,7 @@
                             </td>
                             <td class="border px-4 py-2 align-middle">{{ $penerimaan_barang->req_date}}</td>
                             <td class="border px-4 py-2 align-middle">
-                                <button data-toggle="modal" data-target="#updateModal" 
-                                wire:click="edit({{ $penerimaan_barang->id }})" class="btn btn-primary">
                                     {{ $penerimaan_barang->arrival_date }}
-                                </button>
                             </td>
                             <td class="border px-4 py-2" style="text-align: center;">
                                 @if($penerimaan_barang->status == 'PENDING')
@@ -62,14 +61,10 @@
                             </td>
                             <td class="border px-4 py-2" style="text-align: center;">
                                 @if ($penerimaan_barang->status == 'PENDING')
-                                    <a href="#" wire:click="setStatus('SUCCESS', {{ $penerimaan_barang->id }})"
-                                    class="btn btn-primary btm-sm">
-                                        SUCCESS
-                                    </a>
-                                    <a href="#" wire:click="setStatus('FAILED', {{ $penerimaan_barang->id }})"
-                                    class="btn btn-danger btm-sm">
-                                        FAILED
-                                    </a>
+                                    <button data-toggle="modal" data-target="#status" 
+                                    wire:click="status({{ $penerimaan_barang->id }})" class="btn btn-primary">
+                                        Set Status
+                                    </button>
                                 @elseif($penerimaan_barang->status == 'SUCCESS')
                                     <span class="badge badge-success">SUCCESS</span>
                                 @else

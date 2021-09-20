@@ -20,7 +20,7 @@ class CreateBarangsTable extends Migration
             $table->integer('suplayer_id');
             $table->integer('po_id');
             $table->integer('penerimaan_barang_id');
-            $table->integer('description');
+            $table->string('description');
 
             $table->timestamps();
         });

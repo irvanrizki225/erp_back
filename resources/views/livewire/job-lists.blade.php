@@ -14,7 +14,7 @@
             <div class="block-content block-content-full">
                 @include('livewire.job_list.update')
             </div>
-            <div class="block-content block-content-full">
+            <div class="block-content block-content-full" style="overflow-x:auto;">
                 <!-- DataTables init on table by adding .js-dataTable-full class, functionality is initialized in js/pages/tables_datatables.js -->
                 <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
